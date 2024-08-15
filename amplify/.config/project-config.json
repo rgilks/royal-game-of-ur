@@ -1,6 +1,6 @@
 {
     "providers": ["awscloudformation"],
-    "projectName": "cljstemplate",
+    "projectName": "rgou",
     "version": "3.1",
     "frontend": "javascript",
     "javascript": {

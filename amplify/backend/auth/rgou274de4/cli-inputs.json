@@ -1,10 +1,10 @@
 {
     "version": "1",
     "cognitoConfig": {
-        "identityPoolName": "cljstemplatecc274de4_identitypool_cc274de4",
+        "identityPoolName": "rgoucc274de4_identitypool_cc274de4",
         "allowUnauthenticatedIdentities": false,
         "resourceNameTruncated": "cljstecc274de4",
-        "userPoolName": "cljstemplatecc274de4_userpool_cc274de4",
+        "userPoolName": "rgoucc274de4_userpool_cc274de4",
         "autoVerifiedAttributes": ["email"],
         "mfaConfiguration": "OFF",
         "mfaTypes": ["SMS Text Message"],
@@ -24,7 +24,7 @@
         "userpoolClientLambdaRole": "cljstecc274de4_userpoolclient_lambda_role",
         "userpoolClientSetAttributes": false,
         "sharedId": "cc274de4",
-        "resourceName": "cljstemplatecc274de4",
+        "resourceName": "rgoucc274de4",
         "authSelections": "identityPoolAndUserPool",
         "useDefault": "default",
         "userPoolGroupList": [],

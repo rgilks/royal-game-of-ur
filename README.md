@@ -36,11 +36,11 @@ This is a brief set of instructions to set up a new project, it assumes that you
 
 ### 3. Rename and Setup Project Files
 
-1. Navigate to your 'myproject' directory in your terminal and execute `grep -r cljstemplate .`.
-2. Rename the `api/cljstemplate` folder to `api/myproject`.
-3. Rename the `auth/cljstemplatecc274de4` folder to `api/myprojectc274de4`.
+1. Navigate to your 'myproject' directory in your terminal and execute `grep -r rgou .`.
+2. Rename the `api/rgou` folder to `api/myproject`.
+3. Rename the `auth/rgoucc274de4` folder to `api/myprojectc274de4`.
 4. Empty the content of the `team-provider-info.json` file.
-5. Use a text editor or IDE to find and replace `cljstemplate` with `myproject` across your project, especially check the /amplify.config files. For example, in `project-config.json` change `"projectName": "cljstemplate"` to `"projectName": "myproject"`.
+5. Use a text editor or IDE to find and replace `rgou` with `myproject` across your project, especially check the /amplify.config files. For example, in `project-config.json` change `"projectName": "rgou"` to `"projectName": "myproject"`.
 6. Run `amplify init` in your terminal.
 7. When asked for the environment name, use something like `devmyprojecta`. This allows you to have multiple environments for the same project in the future, like `devmyprojectb`, `devmyprojectc`, etc.
 8. Run `amplify push` and agree to the questions asked.
@@ -250,11 +250,11 @@ https://docs.amplify.aws/cli/start/workflows/
 ```
 ❯ amplify init
 Note: It is recommended to run this command from the root of your app directory
-? Enter a name for the project cljstemplate
+? Enter a name for the project rgou
 The following configuration will be applied:
 
 Project information
-| Name: cljstemplate
+| Name: rgou
 | Environment: dev
 | Default editor: Visual Studio Code
 | App type: javascript
@@ -295,7 +295,7 @@ Using service: Cognito, provided by: awscloudformation
  Warning: you will not be able to edit these selections.
  How do you want users to be able to sign in? Username
  Do you want to configure advanced settings? No, I am done.
-✅ Successfully added auth resource cljstemplatecc274de4 locally
+✅ Successfully added auth resource rgoucc274de4 locally
 
 ✅ Some next steps:
 "amplify push" will build all your local backend resources and provision it in the cloud

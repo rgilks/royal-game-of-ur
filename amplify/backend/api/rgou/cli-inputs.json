@@ -1,11 +1,11 @@
 {
     "version": 1,
     "serviceConfiguration": {
-        "apiName": "cljstemplate",
+        "apiName": "rgou",
         "serviceName": "AppSync",
         "defaultAuthType": {
             "mode": "AMAZON_COGNITO_USER_POOLS",
-            "cognitoUserPoolId": "authcljstemplatecc274de4"
+            "cognitoUserPoolId": "authrgoucc274de4"
         },
         "additionalAuthTypes": [
             {

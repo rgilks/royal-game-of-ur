@@ -1,5 +1,5 @@
 projects:
-  cljstemplate:
+  rgou:
     schemaPath: src/amplify/graphql/schema.json
     includes:
       - src/amplify/graphql/**/*.js

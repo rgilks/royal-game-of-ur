@@ -1,13 +1,13 @@
 {
   "api": {
-    "cljstemplate": {
+    "rgou": {
       "dependsOn": [
         {
           "attributes": [
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "cljstemplatecc274de4"
+          "resourceName": "rgoucc274de4"
         }
       ],
       "output": {
@@ -20,7 +20,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authcljstemplatecc274de4"
+              "userPoolId": "authrgoucc274de4"
             }
           }
         }
@@ -30,7 +30,7 @@
     }
   },
   "auth": {
-    "cljstemplatecc274de4": {
+    "rgoucc274de4": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
