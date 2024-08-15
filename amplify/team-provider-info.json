@@ -20,6 +20,12 @@
       },
       "custom": {
         "sestemplates": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d2vz88i7g4n77e",
+          "type": "cicd"
+        }
       }
     }
   }
