@@ -1,14 +1,17 @@
 (ns app.core
-  (:require
-   ["aws-amplify" :as amplify]
-   ["aws-exports" :default aws-exports]
-   [app.datastore :as datastore]
-   [app.routing :as routing]
-   [app.user :as user]
-   [app.view :as view]
-   [refx.alpha :as refx]
-   [uix.core :refer [$]]
-   [uix.dom]))
+  (:require ["aws-amplify" :as amplify]
+            ["aws-exports" :default aws-exports]
+            ["react-router-dom" :refer [RouterProvider]]
+            [app.api] ;; register fx
+            [app.config :refer [model-config]]
+            [app.datastore] ;; register fx
+            [app.event :as event]
+            [app.router :as router]
+            [app.sub] ;; register subs
+            [app.user] ;; register fx
+            [refx.alpha :as refx]
+            [uix.core :refer [$]]
+            [uix.dom]))
 
 (defn init-hub-listeners! [hub-listeners]
   (doseq [[channel target-event re-frame-event] hub-listeners]
@@ -17,34 +20,36 @@
          channel
          (fn [^js data]
            (let [event (-> data .-payload .-event)]
-             (println channel event)
+            ;;  (println channel event)
              (when (= event target-event)
-               (refx/dispatch [re-frame-event]))))))))
+               (refx/dispatch re-frame-event))))))))
 
-(defn init []
-  (refx/clear-subscription-cache!)
-  (-> amplify/Amplify (.configure aws-exports))
-  (refx/dispatch-sync
-   [::datastore/init
-    {:current-route   nil
-     :datastore-ready false
-     :user            nil
-     :slug            nil
-     :games           nil}])
-  (refx/dispatch-sync [::user/get])
-  ;; (refx/dispatch-sync [::event/init-listeners])
-  (routing/init-routes!)
-  (init-hub-listeners!
-   [["datastore" "ready"  ::datastore/ready]
-    ["auth"      "signIn" ::user/get]])
-  (uix.dom/render-root
-   ($ view/main)
-   (uix.dom/create-root (js/document.getElementById "app"))))
+(def db
+  {:datastore-ready? false
+   :action nil
+   :timeout-ids {}
+   :user nil
+   :texts nil
+   :llm-configs nil
+   :templates nil
+   :drawer-open? true
+   :selected {:model-key :text
+              :parent-key :template
+              :item nil}})
+
+(defonce root
+  (when-let [app-el (js/document.getElementById "app")]
+    (uix.dom/create-root app-el)))
+
+(defn ^:dev/after-load init []
+  (.render root ($ RouterProvider {:router router/browser-router})))
 
 (defn ^:export main []
+  (-> amplify/Amplify (.configure aws-exports))
+  (refx/clear-subscription-cache!)
+  (refx/dispatch-sync [::event/init db])
+  (init-hub-listeners!
+   [["datastore" "ready"  [::event/ready model-config]]
+    ["auth"      "signIn" [::event/get-user]]])
+  (refx/dispatch-sync [::event/get-user])
   (init))
-
-;; (defn ^:dev/after-load clear-cache-and-render!
-;;   []
-;;   (refx/clear-subscription-cache!)
-;;   (init))
