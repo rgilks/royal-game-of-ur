@@ -23,7 +23,7 @@
               :border-bottom "1px solid #a0a0a0"}}
      ($ :img
         {:src "/logo-top-left.png"
-         :alt "TextGen Logo"
+         :alt "Ur Logo"
          :style {:height "48px"}})
      ($ :span
         {:data-testid "app-title"
@@ -32,15 +32,13 @@
                  :fontSize "2.0rem"
                  :padding-left "30px"
                  :padding-right "10px"}}
-        "TextGen")))
+        "The Royal Game of Ur")))
 
 (defui App []
   (let [iOS? (util/iOS? js/navigator)
         {:keys [item]}  (refx/use-sub [::sub/selected-item])
         {:keys [desktop?]} (use-window-size)]
     ($ :<>
-       ($ ui/DeleteModal)
-       ($ ui/AddModal)
        ($ AppTitle)
        ($ mui/Box
           {:data-testid "app-menu"
@@ -55,8 +53,7 @@
               :start-icon ($ icon/Delete)
               :disabled (nil? item)
               :onClick #(refx/dispatch [::event/act :delete])}
-             "Delete")
-          ($ ui/TreeMenu))
+             "Delete"))
        ($ mui/Box
           {:sx #js {:ml (if desktop? "320px" "0px")}}
           ($ router/Outlet)))))

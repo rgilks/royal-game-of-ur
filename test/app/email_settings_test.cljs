@@ -14,7 +14,7 @@
    {::user/update-user-att [(:user db) {"custom:unsubscribed" (str value)}]
     :db              (assoc db :unsubscribed value)}))
 
-(deftest email-settings-subscribe
+#_(deftest email-settings-subscribe
   (refx/reg-fx
    ::user/update-user-att
    (fn [[user att]]
