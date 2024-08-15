@@ -23,32 +23,38 @@ This project is a modern implementation of the ancient Royal Game of Ur using Cl
 ## Setup
 
 1. Clone the repository:
+
    ```
    git clone [your-repo-url]
    cd royal-game-of-ur
    ```
 
 2. Install dependencies:
+
    ```
    yarn install
    ```
 
 3. Initialize Amplify (if not already done):
+
    ```
    amplify init
    ```
 
 4. Push the Amplify backend:
+
    ```
    amplify push
    ```
 
 5. Start the development server:
+
    ```
    yarn watch
    ```
 
 6. In a separate terminal, start webpack:
+
    ```
    yarn webpack
    ```

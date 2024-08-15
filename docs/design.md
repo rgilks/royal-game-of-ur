@@ -11,6 +11,7 @@ The Royal Game of Ur is a race game played between two players. Each player has 
 ### The Board
 
 The game board consists of 20 squares arranged in three rows:
+
 - Two outer rows of 4 squares each, specific to each player
 - A middle row of 8 squares, shared by both players
 
@@ -37,6 +38,7 @@ The game logic is implemented as a state machine, which helps manage the complex
 ![Royal Game of Ur State Diagram](./rgou-fsm.png)
 
 Key states in our implementation include:
+
 - Start Game
 - Roll Dice
 - Choose Action
