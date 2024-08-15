@@ -10,12 +10,11 @@
 
 (def TIMEOUT 300)
 
-(defn sync-expressions [text-id username]
-  [(amplify/syncExpression models/Text
+;; TODO: create the filter function for each model
+(defn sync-expressions [game-id username]
+  [(amplify/syncExpression models/Player
                            (fn [] (fn [^js i] (-> i .-title (.ne "New Title")))))
-   (amplify/syncExpression models/LLMConfig
-                           (fn [] (fn [^js i] (-> i .-title (.ne "New Title")))))
-   (amplify/syncExpression models/Template
+   (amplify/syncExpression models/Game
                            (fn [] (fn [^js i] (-> i .-title (.ne "New Title")))))])
 
 (defn configure [text-id username]
@@ -79,10 +78,10 @@
 
 (refx/reg-fx
  :configure
- (fn [[text-id username]]
-   (println "Datastore configure - username:" username " text-id:" text-id)
+ (fn [[game-id username]]
+   (println "Datastore configure - username:" username " game-id:" game-id)
    (when username
-     (configure text-id username))))
+     (configure game-id username))))
 
 (refx/reg-fx
  :subscribe

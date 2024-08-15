@@ -34,48 +34,29 @@
                  :padding-right "10px"}}
         "TextGen")))
 
-(defui DrawerButton []
-  ($ mui/Button
-     {:data-testid "drawer-open-button"
-      :sx #js {:position "fixed" :left "-22px" :top "-8px" :zIndex 1200}
-      :onClick #(refx/dispatch [::event/toggle-drawer])}
-     ($ icon/Menu
-        {:sx #js {:p 0 :m 0 :boxShadow "0 0 5px #333" :backgroundColor "white"}})))
-
 (defui App []
   (let [iOS? (util/iOS? js/navigator)
-        drawer-open? (refx/use-sub [::sub/drawer-open?])
         {:keys [item]}  (refx/use-sub [::sub/selected-item])
         {:keys [desktop?]} (use-window-size)]
     ($ :<>
        ($ ui/DeleteModal)
        ($ ui/AddModal)
-       ($ mui/SwipeableDrawer
-          {:anchor "left"
-           :open drawer-open?
-           :variant (if desktop? "permanent" "temporary")
-           :disableBackdropTransition (not iOS?)
-           :disableDiscovery iOS?
-           :onOpen #(refx/dispatch [::event/toggle-drawer])
-           :onClose #(refx/dispatch [::event/toggle-drawer])}
-          ($ AppTitle)
-          ($ mui/Box
-             {:data-testid "app-menu"
-              :sx #js {:overflowY "scroll" :height "100%" :width "320px"}}
-             ($ mui/Button
-                {:data-testid "add-item-action"
-                 :start-icon  ($ icon/Add)
-                 :onClick #(refx/dispatch [::event/act :add])}
-                "Add")
-             ($ mui/Button
-                {:data-testid "delete-item-action"
-                 :start-icon ($ icon/Delete)
-                 :disabled (nil? item)
-                 :onClick #(refx/dispatch [::event/act :delete])}
-                "Delete")
-             ($ ui/TreeMenu)))
-       (when (and (not desktop?) (not drawer-open?))
-         ($ DrawerButton))
+       ($ AppTitle)
+       ($ mui/Box
+          {:data-testid "app-menu"
+           :sx #js {:overflowY "scroll" :height "100%" :width "320px"}}
+          ($ mui/Button
+             {:data-testid "add-item-action"
+              :start-icon  ($ icon/Add)
+              :onClick #(refx/dispatch [::event/act :add])}
+             "Add")
+          ($ mui/Button
+             {:data-testid "delete-item-action"
+              :start-icon ($ icon/Delete)
+              :disabled (nil? item)
+              :onClick #(refx/dispatch [::event/act :delete])}
+             "Delete")
+          ($ ui/TreeMenu))
        ($ mui/Box
           {:sx #js {:ml (if desktop? "320px" "0px")}}
           ($ router/Outlet)))))

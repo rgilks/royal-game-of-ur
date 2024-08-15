@@ -29,13 +29,8 @@
    :action nil
    :timeout-ids {}
    :user nil
-   :texts nil
-   :llm-configs nil
-   :templates nil
-   :drawer-open? true
-   :selected {:model-key :text
-              :parent-key :template
-              :item nil}})
+   :games nil
+   :players nil})
 
 (defonce root
   (when-let [app-el (js/document.getElementById "app")]
