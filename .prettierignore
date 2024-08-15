@@ -85,6 +85,8 @@ emails/
 *.xml
 *.zip
 *.disabled
+*.py
+*.pdf
 
 # Linting and formatting
 .prettierignore

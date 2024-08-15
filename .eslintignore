@@ -1,2 +1,6 @@
 src/amplify/models
 amplify-codegen-temp/models
+
+src/amplify/models/models
+
+amplify-codegen-temp/models/models

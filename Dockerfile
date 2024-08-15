@@ -1,8 +1,8 @@
-FROM amazonlinux:2
+FROM amazonlinux:latest
 
-ENV VERSION_NODE_DEFAULT=16
+ENV VERSION_NODE_DEFAULT=21
 ENV VERSION_YARN=1.22.0
-ENV VERSION_AMPLIFY=12.0.0
+ENV VERSION_AMPLIFY=12.10.1
 
 ## Install OS packages
 RUN touch ~/.bashrc
@@ -13,14 +13,11 @@ RUN yum -y update && \
         automake \
         bzip2 \
         bison \
-        bzr \
         cmake \
         expect \
         fontconfig \
         git \
         gcc-c++ \
-        GConf2-devel \
-        gtk2-devel \
         gtk3-devel \
         libnotify-devel \
         libpng \
@@ -55,14 +52,12 @@ RUN yum -y update && \
         zip \
         zlib \
         zlib-devel \
-        java-11-amazon-corretto-headless \
-    yum clean all && \
-    rm -rf /var/cache/yum
+        java-21-amazon-corretto-headless
 
 ## Install Clojure
-RUN curl -O https://download.clojure.org/install/linux-install-1.11.1.1252.sh
-RUN chmod +x linux-install-1.11.1.1252.sh
-RUN ./linux-install-1.11.1.1252.sh
+RUN curl -O https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh
+RUN chmod +x linux-install.sh
+RUN ./linux-install.sh
 
 ## Install Chrome
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
@@ -81,7 +76,6 @@ ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 ## Install AWS Amplify CLI
 RUN /bin/bash -c ". ~/.nvm/nvm.sh && nvm use ${VERSION_NODE_DEFAULT} && \
-    npm config set user 0 && npm config set unsafe-perm true && \
 	npm install -g @aws-amplify/cli@${VERSION_AMPLIFY}"
 
 ## Installing Cypress

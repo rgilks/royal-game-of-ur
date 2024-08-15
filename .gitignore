@@ -13,6 +13,7 @@ amplifytools.xcconfig
 aws-exports.js
 awsconfiguration.json
 build/
+amplify/**/dist
 **.sample
 .secret-*
 
@@ -49,9 +50,12 @@ report.html
 
 # Node.js dependencies
 /node_modules
+**/src/node_modules
+**/lib/nodejs/node_modules
 
 # Cypress
 cypress/videos
 cypress/screenshots
+cypress/downloads
 cypress-config.json
 

@@ -6,9 +6,15 @@
 # e.g. ./deploy-lambda-fn.sh inviteUsers devcljst tre
 
 cd ../amplify/backend/function/$1/src || exit
-rm ../index.zip
-yarn pl
-yarn test
-zip -r ../index.zip index.mjs handler.cljs node_modules
+# yarn install
+# yarn format
+# yarn test
+mkdir -p dist
+cp package.json index.mjs handler.cljs dist
+cd dist
+yarn install --production
+zip -r ../index.zip *
 cd ..
-aws lambda update-function-code --function-name $1-$2 --zip-file fileb://index.zip --profile $3
+aws lambda update-function-code --no-cli-pager --function-name $1-$2 --zip-file fileb://index.zip --profile $3
+rm index.zip
+rm -rf dist
