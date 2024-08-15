@@ -14,26 +14,10 @@
    (assoc-in db [:timeout-ids (str model-id)] timeout-id)))
 
 (refx/reg-event-fx
- ::update-rating
- (fn [{:keys [db]} [_ model id data]]
-   {:update [model id (clj->js data)]
-    :db (assoc-in db [:texts id :rating] (:rating data))}))
-
-(refx/reg-event-fx
  ::update-with-debounce
  (fn [{:keys [db]} [_ model id data]]
    {:clear-timeout (get-in db [:timeout-ids (str id)])
     :update-with-timeout [model id data]}))
-
-(refx/reg-event-db
- ::select-clone
- (fn [db [_ id]]
-   (assoc db :selected-clone id)))
-
-(refx/reg-event-db
- ::toggle-drawer
- (fn [db [_]]
-   (update db :drawer-open? not)))
 
 (refx/reg-event-db
  ::select-item
@@ -103,9 +87,9 @@
 (refx/reg-event-fx
  ::configure
  (fn
-   [{:keys [db]} [_ text-id]]
+   [{:keys [db]} [_ game-id]]
    (let [username (:username db)]
-     {:configure [text-id username]
+     {:configure [game-id username]
       :db (assoc db :datastore-ready? false)})))
 
 (refx/reg-event-fx
@@ -131,10 +115,9 @@
     :dispatch [::configure "UNKNOWN"]}))
 
 (refx/reg-event-fx
- ::generate-text
+ ::action
  (fn [{:keys [db]} [_ id]]
-   {:appsync-invoke [:generate-text {:textId id}]
+   {:appsync-invoke [:action {:gameId id}]
     :db (-> db
-            (assoc-in [:texts id :state] "GENERATING")
-            (assoc :selected-clone nil))}))
+            (assoc-in [:games id :state] "ACTION"))}))
 

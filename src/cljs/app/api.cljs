@@ -4,8 +4,8 @@
    [refx.alpha :as refx]))
 
 (def queries
-  {:generate-text
-   "mutation operation($input: GenerateTextInput!) {generateText(input: $input)}"})
+  {:action
+   "mutation operation($input: RGOUActionInput!) {rgouActionHandler(input: $input)}"})
 
 (refx/reg-fx
  :appsync-invoke
