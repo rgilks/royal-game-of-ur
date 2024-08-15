@@ -2,6 +2,8 @@
 
 This project is a modern implementation of the ancient Royal Game of Ur using ClojureScript, React, and AWS Amplify. It features a web-based interface with real-time multiplayer functionality.
 
+[Design Doc](./docs/design.md)
+
 ## Features
 
 - ClojureScript frontend using Pitch UIx library
