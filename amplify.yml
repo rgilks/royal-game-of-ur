@@ -8,7 +8,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - yarn install --frozen-lockfile
+        - yarn install
     build:
       commands:
         - node -v
@@ -26,7 +26,7 @@ test:
   phases:
     preTest:
       commands:
-        - yarn install --frozen-lockfile
+        - yarn install
         - yarn add mocha mochawesome mochawesome-merge mochawesome-report-generator
     test:
       commands:
