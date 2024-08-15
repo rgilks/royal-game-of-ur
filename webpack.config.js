@@ -8,6 +8,7 @@ const appConfig = {
   entry: './target/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
     filename: 'js/libs/bundle.js',
     clean: false
   },
@@ -42,10 +43,7 @@ const appConfig = {
     }),
     new HtmlWebpackPlugin({
       template: './dist/index.html.tmpl',
-      filename: 'index.html',
-      templateParameters: {
-        basePath: process.env.BASE_PATH ?? 'http://localhost:3000/'
-      }
+      filename: 'index.html'
     }),
     new HtmlBeautifierPlugin()
   ]
@@ -56,6 +54,7 @@ const testConfig = {
   entry: './karma/index.js',
   output: {
     path: path.resolve(__dirname, 'karma'),
+    publicPath: '/',
     filename: 'js/libs/bundle.js',
     clean: false
   },
