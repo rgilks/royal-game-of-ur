@@ -8,6 +8,7 @@
   "trailingComma": "none",
   "printWidth": 80,
   "arrowParens": "avoid",
+  "endOfLine": "lf",
   "overrides": [
     {
       "files": "amplify/**/*.json",

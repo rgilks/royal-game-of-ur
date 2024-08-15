@@ -38,7 +38,7 @@ This is a brief set of instructions to set up a new project, it assumes that you
 
 1. Navigate to your 'myproject' directory in your terminal and execute `grep -r rgou .`.
 2. Rename the `api/rgou` folder to `api/myproject`.
-3. Rename the `auth/rgoucc274de4` folder to `api/myprojectc274de4`.
+3. Rename the `auth/rgou274de4` folder to `api/myprojectc274de4`.
 4. Empty the content of the `team-provider-info.json` file.
 5. Use a text editor or IDE to find and replace `rgou` with `myproject` across your project, especially check the /amplify.config files. For example, in `project-config.json` change `"projectName": "rgou"` to `"projectName": "myproject"`.
 6. Run `amplify init` in your terminal.
@@ -295,7 +295,7 @@ Using service: Cognito, provided by: awscloudformation
  Warning: you will not be able to edit these selections.
  How do you want users to be able to sign in? Username
  Do you want to configure advanced settings? No, I am done.
-✅ Successfully added auth resource rgoucc274de4 locally
+✅ Successfully added auth resource rgou274de4 locally
 
 ✅ Some next steps:
 "amplify push" will build all your local backend resources and provision it in the cloud

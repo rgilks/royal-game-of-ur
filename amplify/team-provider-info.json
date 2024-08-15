@@ -1,0 +1,26 @@
+{
+  "devrgou": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-rgou-devrgou-39f19-authRole",
+      "UnauthRoleArn": "arn:aws:iam::250357559699:role/amplify-rgou-devrgou-39f19-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::250357559699:role/amplify-rgou-devrgou-39f19-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-rgou-devrgou-39f19-deployment",
+      "UnauthRoleName": "amplify-rgou-devrgou-39f19-unauthRole",
+      "StackName": "amplify-rgou-devrgou-39f19",
+      "StackId": "arn:aws:cloudformation:eu-west-1:250357559699:stack/amplify-rgou-devrgou-39f19/5c2b3620-5b03-11ef-8c62-02e12ea43353",
+      "AmplifyAppId": "d2vz88i7g4n77e"
+    },
+    "categories": {
+      "auth": {
+        "rgou274de4": {}
+      },
+      "api": {
+        "rgou": {}
+      },
+      "custom": {
+        "sestemplates": {}
+      }
+    }
+  }
+}

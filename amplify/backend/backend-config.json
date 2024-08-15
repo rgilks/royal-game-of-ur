@@ -7,7 +7,7 @@
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "rgoucc274de4"
+          "resourceName": "rgou274de4"
         }
       ],
       "output": {
@@ -20,7 +20,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authrgoucc274de4"
+              "userPoolId": "authrgou274de4"
             }
           }
         }
@@ -30,7 +30,7 @@
     }
   },
   "auth": {
-    "rgoucc274de4": {
+    "rgou274de4": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {

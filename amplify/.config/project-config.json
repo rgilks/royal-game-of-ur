@@ -1,5 +1,4 @@
 {
-    "providers": ["awscloudformation"],
     "projectName": "rgou",
     "version": "3.1",
     "frontend": "javascript",
@@ -8,8 +7,9 @@
         "config": {
             "SourceDir": "src/amplify",
             "DistributionDir": "public",
-            "BuildCommand": "npm run-script build",
-            "StartCommand": "npm run-script start"
+            "BuildCommand": "yarn build",
+            "StartCommand": "yarn start"
         }
-    }
+    },
+    "providers": ["awscloudformation"]
 }
