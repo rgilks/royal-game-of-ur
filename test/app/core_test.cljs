@@ -9,7 +9,7 @@
   (let [event-dispatched (atom nil)]
     (with-redefs [refx/dispatch #(reset! event-dispatched %)]
       (core/init-hub-listeners!
-       [["test-channel" "test-event-1" ::test-event-1]])
+       [["test-channel" "test-event-1" [::test-event-1]]])
       (is (nil? @event-dispatched))
       (-> amplify/Hub
           (.dispatch "test-channel" (clj->js {:event "X"})))

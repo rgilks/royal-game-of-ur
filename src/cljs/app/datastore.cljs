@@ -2,126 +2,117 @@
   (:require
    ["aws-amplify" :as amplify]
    ["models" :as models]
-   [app.util :as util]
+   [app.event :as event]
+   [cljs-bean.core :refer [bean]]
    [goog.object :as gobj]
    [promesa.core :as p]
    [refx.alpha :as refx]))
 
-(defn sync-expressions [game-id username]
-  [;;(amplify/syncExpression models/Game
-   ;;  (fn [] (fn [^js i] (-> i .-name (.ne "New")))))
-   ])
+(def TIMEOUT 300)
 
-(defn configure [game-id username]
+(defn sync-expressions [text-id username]
+  [(amplify/syncExpression models/Text
+                           (fn [] (fn [^js i] (-> i .-title (.ne "New Title")))))
+   (amplify/syncExpression models/LLMConfig
+                           (fn [] (fn [^js i] (-> i .-title (.ne "New Title")))))
+   (amplify/syncExpression models/Template
+                           (fn [] (fn [^js i] (-> i .-title (.ne "New Title")))))])
+
+(defn configure [text-id username]
   (p/do
     (.configure
      amplify/DataStore
-     (clj->js {:amplify/syncExpressions (sync-expressions game-id username)}))
-    (.stop amplify/DataStore))
-  (js/setTimeout #(.start amplify/DataStore) 1000))
+     (clj->js {:amplify/syncExpressions (sync-expressions text-id username)}))
+    (.stop amplify/DataStore)
+    (.start amplify/DataStore))
+  ;; (js/setTimeout #(.start amplify/DataStore) 1000)
+  )
 
-(defn- handle-subs [model-key ^js msg]
+(defn- handle-subs [model-list-key ^js msg]
   (let [element (.-element msg)
         id      (.-id element)
         opType  (.-opType msg)]
     (if (= opType "DELETE")
-      (refx/dispatch [::delete-model model-key id])
-      (refx/dispatch [::update-model model-key id (util/obj->clj element)]))))
+      (refx/dispatch [::event/delete-model model-list-key id])
+      (refx/dispatch [::event/update-model model-list-key id (bean element :recursive true)]))))
+
+(defn not-in?
+  "true if coll does not contain elm"
+  [coll elm]
+  (not (some #(= elm %) coll)))
+
+(defn update-item!
+  "Update item with updates, ignoring keys in ignore-keys
+   Note that this function mutates item and returns nil"
+  [^js/object item ^js/object update-data ignore-keys]
+  (gobj/forEach
+   update-data
+   (fn [v k _]
+     (when (and k (not-in? ignore-keys k))
+       (let [existing-value (gobj/get item k)]
+         (if (and (object? existing-value) (object? v))
+           (gobj/set item k (js/Object.assign existing-value v))
+           (gobj/set item k v)))))))
+
+(def ignore-keys
+  #{"_version" "_lastChangedAt" "_deleted" "updatedAt"})
+
+(defn update-entity! [model id update-data]
+  (p/let [item (.query amplify/DataStore model (str id))]
+    (.save amplify/DataStore
+           ^js/object
+           (.copyOf model item
+                    #(update-item! % update-data ignore-keys)))))
+
+(refx/reg-fx
+ :update
+ (fn [[model id data]]
+   (update-entity! model id data)))
+
+(refx/reg-fx
+ :update-with-timeout
+ (fn [[model id data]]
+   (let [update-fn #(do (update-entity! model id data)
+                        (refx/dispatch [::event/clear-timeout (str id)]))
+         timeout-id (js/setTimeout update-fn TIMEOUT)]
+     (refx/dispatch [::event/add-timeout id timeout-id]))))
 
 (refx/reg-fx
  :configure
- (fn [[game-id username]]
-   (println "Datastore configure - username:" username " game-id:" game-id)
+ (fn [[text-id username]]
+   (println "Datastore configure - username:" username " text-id:" text-id)
    (when username
-     (configure game-id username))))
+     (configure text-id username))))
 
 (refx/reg-fx
  :subscribe
- (fn [models]
-   (doseq [[key model] models]
+ (fn [model-config]
+   (doseq [[_ {:keys [list-key model]}] model-config]
      (.subscribe
-      (.observe amplify/DataStore model) #(handle-subs key %)))))
+      (.observe amplify/DataStore model) #(handle-subs list-key %)))))
 
 (refx/reg-fx
  :get-items
- (fn [models]
-   (doseq [[key model] models]
+ (fn [model-config]
+   (doseq [[_ {:keys [list-key model]}] model-config]
      (p/let [result (.query amplify/DataStore model)
-             data (util/obj->clj result)
+             data (map #(bean % :recursive true) result)
              keyed-data (reduce #(assoc %1 (:id %2) %2) {} data)]
-       (refx/dispatch [::update-models key keyed-data])))))
-
-(refx/reg-event-db
- ::init
- (fn [_ [_ init]] init))
-
-(refx/reg-event-db
- ::update-models
- (fn [db [_ model-key data]]
-   (assoc db model-key data)))
-
-(refx/reg-event-db
- ::delete-model
- (fn [db [_ model-key id]]
-   (println "DELETE MODEL" model-key id)
-   (update db model-key dissoc id)))
-
-(refx/reg-event-db
- ::update-model
- (fn [db [_ model-key id data]]
-   (println "UPDATE MODEL" model-key id data)
-   (when (not (get-in db [:timeout-ids id]))
-     (assoc-in db [model-key id] data))))
-
-(refx/reg-event-fx
- ::configure
- (fn
-   [{:keys [db]} [_ game-id]]
-   (let [username (:username db)]
-     {:configure [game-id username]
-      :db (assoc db :datastore-ready false)})))
-
-(refx/reg-event-fx
- ::ready
- (fn
-   [{:keys [db]} [_]]
-   (let [models  [[:games models/Game]]]
-     {:get-items models
-      :subscribe models
-      :db (assoc db :datastore-ready true)})))
+       (refx/dispatch [::event/update-models list-key keyed-data])))))
 
 (refx/reg-fx
- :delete-item
+ :delete
  (fn [[model id]]
    (p/let [item (.query amplify/DataStore model id)]
      (.delete amplify/DataStore item))))
 
 (refx/reg-fx
- :new-item
+ :save
  (fn [[model item]]
    (.save amplify/DataStore
           (model. (clj->js item)))))
 
-(def ignore-keys
-  #{"_version" "_lastChangedAt" "_deleted" "updatedAt"})
-
-(defn in?
-  "true if coll contains elm"
-  [coll elm]
-  (some #(= elm %) coll))
-
 (refx/reg-fx
- :update-item
- (fn [[model item]]
-   (p/let [result (.query amplify/DataStore model (:id item))
-           clone ^js/object (.copyOf
-                             model
-                             result
-                             #(gobj/forEach
-                               item
-                               (fn [v k _]
-                                 (when (not (in? ignore-keys k))
-                                   (gobj/set % k v)))))]
-     (println "UPDATE ITEM" (util/obj->clj result))
-     (println "CLONE" clone)
-     (.save amplify/DataStore clone))))
+ :clear-timeout
+ (fn [timeout-id]
+   (js/clearTimeout timeout-id)))
